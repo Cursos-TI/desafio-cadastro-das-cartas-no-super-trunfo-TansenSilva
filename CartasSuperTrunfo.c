@@ -1,51 +1,103 @@
 #include <stdio.h>
+#include <string.h>
 
-int main() {
-    char codigo_cidade[4]; // Ajustado para armazenar o código no formato "A01"
-    char nome_cidade[50];
+// Definição da estrutura da carta
+typedef struct {
+    char codigo[4];
+    char nome[50];
     long populacao;
-    float area_territorial;
+    float area;
     double PIB;
-    int qtd_pontos_turisticos;
+    int pontos_turisticos;
     float densidade_populacional;
     double PIB_per_capita;
+    double super_poder;
+} Carta;
 
-    printf("*********** Super Trunfo - Países ***********\n\n");
-    printf("Iniciando cadastramento das cartas das cidades.\n\n");
-    printf("Abaixo, digite os dados referentes à carta da cidade que deseja cadastrar.\n\n");
+// Função para calcular propriedades derivadas
+void calcular_propriedades(Carta *c) {
+    c->densidade_populacional = c->populacao / c->area;
+    c->PIB_per_capita = c->PIB / c->populacao;
+    c->super_poder = c->populacao + c->area + c->PIB + c->pontos_turisticos + c->densidade_populacional + c->PIB_per_capita;
+}
 
-    printf("Digite o código da cidade (formato A01): ");
-    scanf("%3s", codigo_cidade); // Lê até 3 caracteres para o código
+// Função para comparar duas cartas
+void comparar_cartas(Carta c1, Carta c2) {
+    printf("\nComparando %s e %s:\n", c1.nome, c2.nome);
 
-    printf("Digite o nome da cidade: ");
-    scanf(" %49[^\n]", nome_cidade); // Lê até 49 caracteres, incluindo espaços
+    // Densidade Populacional (menor é melhor)
+    if (c1.densidade_populacional < c2.densidade_populacional)
+        printf("Densidade Populacional: %s vence\n", c1.nome);
+    else
+        printf("Densidade Populacional: %s vence\n", c2.nome);
 
-    printf("Digite o número de habitantes: ");
-    scanf("%ld", &populacao);
+    // População (maior é melhor)
+    if (c1.populacao > c2.populacao)
+        printf("População: %s vence\n", c1.nome);
+    else
+        printf("População: %s vence\n", c2.nome);
 
-    printf("Digite quantos quilômetros quadrados a cidade possui: ");
-    scanf("%f", &area_territorial);
+    // Área (maior é melhor)
+    if (c1.area > c2.area)
+        printf("Área: %s vence\n", c1.nome);
+    else
+        printf("Área: %s vence\n", c2.nome);
 
-    printf("Digite o valor do PIB da cidade: ");
-    scanf("%lf", &PIB);
+    // PIB (maior é melhor)
+    if (c1.PIB > c2.PIB)
+        printf("PIB: %s vence\n", c1.nome);
+    else
+        printf("PIB: %s vence\n", c2.nome);
 
-    printf("Digite a quantidade de pontos turísticos que a cidade possui: ");
-    scanf("%d", &qtd_pontos_turisticos);
+    // Pontos Turísticos (maior é melhor)
+    if (c1.pontos_turisticos > c2.pontos_turisticos)
+        printf("Pontos Turísticos: %s vence\n", c1.nome);
+    else
+        printf("Pontos Turísticos: %s vence\n", c2.nome);
 
-    // Cálculo das novas propriedades
-    densidade_populacional = populacao / area_territorial;
-    PIB_per_capita = PIB / populacao;
+    // PIB per Capita (maior é melhor)
+    if (c1.PIB_per_capita > c2.PIB_per_capita)
+        printf("PIB per Capita: %s vence\n", c1.nome);
+    else
+        printf("PIB per Capita: %s vence\n", c2.nome);
 
-    printf("\n***** Cidade cadastrada com sucesso! *****\n\n");
-    printf("Código da cidade: %s\n", codigo_cidade);
-    printf("Nome da cidade: %s\n", nome_cidade);
-    printf("População: %ld habitantes\n", populacao);
-    printf("Área territorial: %.2f km²\n", area_territorial);
-    printf("PIB: %.2lf\n", PIB);
-    printf("Quantidade de pontos turísticos: %d\n", qtd_pontos_turisticos);
-    printf("Densidade Populacional: %.2f habitantes/km²\n", densidade_populacional);
-    printf("PIB per Capita: %.2lf\n", PIB_per_capita);
-    printf("\n********************************************\n");
+    // Super Poder (maior é melhor)
+    if (c1.super_poder > c2.super_poder)
+        printf("Super Poder: %s vence\n", c1.nome);
+    else
+        printf("Super Poder: %s vence\n", c2.nome);
+}
+
+int main() {
+    Carta cartas[2];
+
+    for (int i = 0; i < 2; i++) {
+        printf("\nCadastro da carta %d:\n", i + 1);
+
+        printf("Digite o código da cidade (formato A01): ");
+        scanf("%3s", cartas[i].codigo);
+
+        printf("Digite o nome da cidade: ");
+        scanf(" %49[^\n]", cartas[i].nome);
+
+        printf("Digite o número de habitantes: ");
+        scanf("%ld", &cartas[i].populacao);
+
+        printf("Digite a área da cidade em km²: ");
+        scanf("%f", &cartas[i].area);
+
+        printf("Digite o PIB da cidade: ");
+        scanf("%lf", &cartas[i].PIB);
+
+        printf("Digite o número de pontos turísticos: ");
+        scanf("%d", &cartas[i].pontos_turisticos);
+
+        // Calcular propriedades derivadas
+        calcular_propriedades(&cartas[i]);
+    }
+
+    // Comparar as duas cartas cadastradas
+    comparar_cartas(cartas[0], cartas[1]);
 
     return 0;
 }
